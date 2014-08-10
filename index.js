@@ -1,4 +1,12 @@
-module.exports = function () {
-    this.dependencies = function() {};
-    this.addDep = function (dep) {};
+function DepsGraph () {
+}
+
+DepsGraph.prototype.dependencies = function (path) {
+
 };
+
+DepsGraph.prototype.addDep = function (dep) {
+
+};
+
+module.exports = DepsGraph;

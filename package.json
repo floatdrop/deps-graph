@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/floatdrop/deps-graph/issues"
   },
-  "homepage": "https://github.com/floatdrop/deps-graph"
+  "homepage": "https://github.com/floatdrop/deps-graph",
+  "devDependencies": {
+    "mocha": "^1.21.4"
+  }
 }

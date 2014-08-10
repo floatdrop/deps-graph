@@ -26,11 +26,9 @@ Returned array should contain objects with required fields:
  * `path` - path on filesystem to folder, that contains block files
  * `bem` - right formed BEM identifier that corresponds to that block
  * `block` - block name
- * `bmod` - block modificator
- * `bvalue` - block modificator value
  * `elem` - element name
- * `emod` - element modificator
- * `evalue` - element modificator value
+ * `mod` - modificator
+ * `value` - modificator value
 
 ## License
 

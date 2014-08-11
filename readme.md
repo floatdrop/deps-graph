@@ -1,5 +1,7 @@
 # deps-graph [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][depstat-image]][depstat-url]
 
+This module constructs dependency graph of blocks, constructed by `deps-entity` declarations. 
+
 ## API
 
 ### DepsGraph()

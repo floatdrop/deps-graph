@@ -1,36 +1,22 @@
 # deps-graph [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][depstat-image]][depstat-url]
 
-This module constructs dependency graph of blocks, constructed by `deps-entity` declarations. 
+This module constructs dependency graph of blocks, constructed with [BEM objects](https://github.com/floatdrop/gulp-bem#bem-object).
 
 ## API
 
-### DepsGraph()
+### DepsGraph([parent])
 
-Constructor.
+Constructor. Can accept parent DepsGraph.
 
-### DepsGraph.addDep(dep)
+### DepsGraph.add(BEMObject)
 Returns: nothing  
 
-Stores dep object in graph. Dep object should contain all properties, that are defined in [deps-entity declaration](http://bem.info/tools/bem/bem-tools/depsjs/). Also it can contain properties from [vinyl file](https://github.com/wearefractal/vinyl) of deps-entity. And finally parsed bem properties from path (by [default bem convention](http://bem.info/tools/bem/bem-tools/levels/) about directory structure):
-
- * `level` - parent directory of block
- * `block` - block directory
- * `elem` - elem directory (without `__`)
- * `mod` - mod directory  (without `_`)
+Stores [BEM object](https://github.com/floatdrop/gulp-bem#bem-object) in graph.
 
 ### DepsGraph.dependencies(path)
-Returns: `Array`  
+Returns: `Array` of [BEM objects](https://github.com/floatdrop/gulp-bem#bem-object).
 
 Gets all dependencies for block at path. Path is equivalent of `level/block/__elem/_mod`. Returned dependencies are sorted in order, that defined by `mustDeps` and `shouldDeps` of corresponding deps-entities and levels of declaration.
-
-Returned array should contain objects with required fields: 
-
- * `path` - path on filesystem to folder, that contains block files
- * `bem` - right formed BEM identifier that corresponds to that block
- * `block` - block name
- * `elem` - element name
- * `mod` - modificator
- * `value` - modificator value
 
 ## License
 

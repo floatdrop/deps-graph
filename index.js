@@ -5,7 +5,7 @@ DepsGraph.prototype.dependencies = function (path) {
 
 };
 
-DepsGraph.prototype.addDep = function (dep) {
+DepsGraph.prototype.add = function (BEM) {
 
 };
 

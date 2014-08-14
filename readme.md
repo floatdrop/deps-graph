@@ -20,7 +20,7 @@ Gets all dependencies for block at path. Path is equivalent of `level/block/__el
 
 ## License
 
-MIT (c) 2014 Vsevolod Strukchinsky
+MIT (c) 2014 Vsevolod Strukchinsky, Vladimir Starkov
 
 [npm-url]: https://npmjs.org/package/deps-graph
 [npm-image]: https://badge.fury.io/js/deps-graph.png

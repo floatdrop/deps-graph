@@ -3,12 +3,6 @@
 var Graph = require('../index.js');
 var should = require('should');
 var bemObject = require('bem-object');
-var assign = require('object-assign');
-
-bemObject._fromPath = bemObject.fromPath;
-bemObject.fromPath = function(path, ext) {
-    return bemObject.fromPath(path).assign(ext);
-};
 
 describe('Graph', function () {
     var graph;

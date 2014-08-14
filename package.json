@@ -22,6 +22,8 @@
   },
   "homepage": "https://github.com/floatdrop/deps-graph",
   "devDependencies": {
-    "mocha": "^1.21.4"
+    "mocha": "^1.21.4",
+    "should": "^4.0.4",
+    "object-assign": "~1.0.0"
   }
 }

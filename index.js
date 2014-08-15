@@ -41,7 +41,7 @@ DepsGraph.prototype.findByPath = function (path) {
 
     var g = this.graphs[bem.level];
     if (g) {
-        var object = g[bem.bem];
+        var object = g[bem.id];
         if (object) {
             return object;
         }
@@ -56,7 +56,7 @@ DepsGraph.prototype.add = function (bem) {
         this.graphs[bem.level] = {};
     }
 
-    this.graphs[bem.level][bem.bem] = bem;
+    this.graphs[bem.level][bem.id] = bem;
  };
 
 DepsGraph.prototype.parentLevels = function (bem) {
@@ -69,7 +69,7 @@ DepsGraph.prototype.find = function (bem, levels) {
     var graphs = levels.map(function (level) { return self.graphs[level]; });
 
     return graphs.reduce(function (previous, graph) {
-        var bem = graph[bem.bem];
+        var bem = graph[bem.id];
         if (bem) {
             previous.push(bem);
         }

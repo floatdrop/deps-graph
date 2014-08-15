@@ -26,7 +26,7 @@
     "should": "^4.0.4"
   },
   "dependencies": {
-    "bem-object": "^0.3.0",
+    "bem-object": "^0.4.0",
     "flatit": "^1.1.0",
     "sliced": "^0.0.5"
   }

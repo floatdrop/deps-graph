@@ -37,7 +37,7 @@ DepsGraph.prototype.findByPath = function (path) {
         throw new Error('path parameter is not a string');
     }
 
-    var bem = bemObject.fromPath(path).level;
+    var bem = bemObject.fromPath(path);
 
     var g = this.graphs[bem.level];
     if (g) {

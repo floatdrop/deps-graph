@@ -25,5 +25,8 @@
     "mocha": "^1.21.4",
     "should": "^4.0.4",
     "bem-object": "^0.1.0"
+  },
+  "dependencies": {
+    "algorithms": "~0.5.0"
   }
 }

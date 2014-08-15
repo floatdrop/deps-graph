@@ -14,7 +14,16 @@ describe('Graph', function () {
     it('should throw exception for non existed BEM object', function () {
         (function() {
             graph.deps('/undefined');
-        }).should.throw('bem object with path /undefined not found');
+        }).should.throw('BEM object with path `/undefined` not found');
+    });
+
+    it('should throw exception for BEM object finding in levels', function () {
+        var block = bemObject.fromPath('/level/block');
+        graph.add(block);
+
+        (function() {
+            graph.deps('/level');
+        }).should.throw('BEM object with path `/level` cannot be a level');
     });
 
     it('should create deps array with only one BEM object', function () {

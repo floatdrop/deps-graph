@@ -1,46 +1,79 @@
-var Graph = require('algorithms').DataStructure.Graph;
-
-Array.prototype.contain = function(item) {
-    return this.indexOf(item) !== -1;
-};
-
-Array.prototype.last = function() {
-    return this[this.length - 1];
-};
+var flatit = require('flatit');
+var sliced = require('sliced');
+var bemObject = require('bem-object');
 
 function DepsGraph() {
-    this.graph = new Graph();
-    this.graph.addVertex('root');
+    this.graphs = {};
+    this.levels = [];
 }
 
-DepsGraph.prototype._getLevels = function () {
-    return this.graph.neighbors('root');
+function pluck(prop) { return function (o) { return o[prop]; }; }
+
+DepsGraph.prototype.deps = function (bem) {
+    if (typeof bem === 'string') {
+        bem = this.findByPath(bem);
+    }
+    
+    var parentLevels = this.parentLevels(bem);
+    var parentBem = this.find(bem, parentLevels);
+
+    var require = [
+        parentBem.map(pluck('require')).map(this.deps),
+        bem.require.map(this.deps)
+    ];
+    
+    var self = [parentBem, bem];
+    
+    var expect = [
+        parentBem.map(pluck('expect')).map(this.deps),
+        bem.expect.map(this.deps)
+    ];
+
+    return flatit([require, self, expect]);
 };
 
-DepsGraph.prototype._addlevel = function (level) {
-    this.graph.addVertex(level);
-    this.graph.addEdge(level, this._getLevels().last() || 'root');
-    this.graph.addEdge('root', level, this._getLevels().length);
-};
+DepsGraph.prototype.findByPath = function (path) {
+    if (typeof path !== 'string') {
+        throw new Error('path parameter is not a string');
+    }
 
-DepsGraph.prototype.deps = function (path) {
-    if (!this.graph.vertices.contain(path)) {
-        throw new Error('BEM object with path `' + path + '` not found');
-    } else {
-        if (this._getLevels().contain(path)) {
-            throw new Error('BEM object with path `' + path + '` cannot be a level');
+    var bem = bemObject.fromPath(path).level;
+
+    var g = this.graphs[bem.level];
+    if (g) {
+        var object = g[bem.bem];
+        if (object) {
+            return object;
         }
     }
-
+    
+    throw new Error('BEM object with path `' + path + '` not found');
 };
 
-DepsGraph.prototype.add = function (bemObject) {
-    if (!this._getLevels().contain(bemObject.level)) {
-        this._addlevel(bemObject.level);
+DepsGraph.prototype.add = function (bem) {
+    if (this.levels.indexOf(bem.level) === -1) {
+        this.levels.push(bem.level);
+        this.graphs[bem.level] = {};
     }
+    
+    this.graphs[bem.level][bem.bem] = bem;
+ };
 
-    this.graph.addVertex(bemObject.path);
-    this.graph.addEdge(bemObject.path, bemObject.level);
+DepsGraph.prototype.parentLevels = function (bem) {
+    var i = this.levels.indexOf(bem.level);
+    return sliced(this.levels, i);
+};
+
+DepsGraph.prototype.find = function (bem, levels) {
+    var self = this;
+    var graphs = levels.map(function (level) { return self.graphs[level]; });
+    
+    return graphs.reduce(function (previous, graph) {
+        var bem = graph[bem.bem];
+        if (bem) {
+            previous.push(bem);
+        }
+    }, []);
 };
 
 module.exports = DepsGraph;

@@ -23,10 +23,11 @@
   "homepage": "https://github.com/floatdrop/deps-graph",
   "devDependencies": {
     "mocha": "^1.21.4",
-    "should": "^4.0.4",
-    "bem-object": "^0.1.0"
+    "should": "^4.0.4"
   },
   "dependencies": {
-    "algorithms": "~0.5.0"
+    "bem-object": "^0.3.0",
+    "flatit": "^1.1.0",
+    "sliced": "^0.0.5"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "deps-graph",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Builds graph by BEM deps",
   "main": "index.js",
   "scripts": {

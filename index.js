@@ -18,15 +18,15 @@ DepsGraph.prototype.deps = function (bem) {
     var parentBems = this.find(bem, parentLevels);
 
     var require = [
-        parentBems.map(pluck('required')).map(this.deps.bind(this)),
-        bem.required.map(this.deps.bind(this))
+        parentBems.map(pluck('required')).map(this.deps, this),
+        bem.required.map(this.deps, this)
     ];
 
     var self = [parentBems, bem];
 
     var expect = [
-        parentBems.map(pluck('expected')).map(this.deps.bind(this)),
-        bem.expected.map(this.deps.bind(this))
+        parentBems.map(pluck('expected')).map(this.deps, this),
+        bem.expected.map(this.deps, this)
     ];
 
     return flatit([require, self, expect]);
@@ -39,7 +39,7 @@ DepsGraph.prototype.findByPath = function (path) {
 
     var bem = bemObject.fromPath(path);
 
-    var g = this.graphs[bem.level];
+    var g = this.getLevel(bem.level);
     if (g && g[bem.id]) {
         return g[bem.id];
     }
@@ -47,29 +47,32 @@ DepsGraph.prototype.findByPath = function (path) {
     throw new Error('BEM object with path `' + path + '` not found');
 };
 
+function contains(array, object) { return array.indexOf(object) !== -1; }
+
 DepsGraph.prototype.add = function (bem) {
-    if (this.levels.indexOf(bem.level) === -1) {
-        this.levels.push(bem.level);
-        this.graphs[bem.level] = {};
+    if (!contains(this.levels, bem.level)) {
+        this.createLevel(bem.level);
     }
 
-    this.graphs[bem.level][bem.id] = bem;
- };
+    this.getLevel(bem.level)[bem.id] = bem;
+};
+
+DepsGraph.prototype.createLevel = function (level) {
+    this.levels.push(level);
+    this.graphs[level] = {};
+};
 
 DepsGraph.prototype.parentLevels = function (bem) {
     var i = this.levels.indexOf(bem.level);
-    return i === -1 ? sliced(this.levels, 0, i) : [];
+    return i === -1 ? sliced(this.levels, 0, i).map(this.getLevel, this) : [];
 };
 
-DepsGraph.prototype.find = function (bem, levels) {
-    var self = this;
-    var graphs = levels.map(function (level) { return self.graphs[level]; });
+DepsGraph.prototype.getLevel = function (level) { return this.graphs[level]; };
 
-    return graphs.reduce(function (previous, graph) {
-        var bem = graph[bem.id];
-        if (bem) {
-            previous.push(bem);
-        }
+DepsGraph.prototype.find = function (bem, levels) {
+    return levels.reduce(function (previous, level) {
+        var bem = level[bem.id];
+        if (bem) { previous.push(bem); }
     }, []);
 };
 

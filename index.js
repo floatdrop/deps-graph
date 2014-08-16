@@ -23,7 +23,12 @@ DepsGraph.prototype.deps = function (bem) {
     ];
 
     var self = [parentBems];
-    if (this.get(bem)) { self.push(bem); }
+
+    if (this.contains(bem)) {
+        self.push(bem);
+    } else if (parentBems.length === 0) {
+        throw new Error('Not found `' + bem.path + '` in any levels.');
+    }
 
     var expect = [
         flatit(parentBems.map(pluck('expected'))).map(this.deps, this),
@@ -33,17 +38,12 @@ DepsGraph.prototype.deps = function (bem) {
     return flatit([require, self, expect]);
 };
 
-DepsGraph.prototype.get = function (path) {
-    if (typeof path === 'string') {
-        path = bemObject.fromPath(path);
+DepsGraph.prototype.contains = function (bem) {
+    if (typeof bem === 'string') {
+        bem = bemObject.fromPath(bem);
     }
 
-    var g = this.getLevel(path.level);
-    if (g && g[path.id]) {
-        return g[path.id];
-    }
-
-    return undefined;
+    return this.getLevel(bem.level) && this.getLevel(bem.level)[bem.id];
 };
 
 DepsGraph.prototype.findByPath = function (path) {
@@ -51,7 +51,7 @@ DepsGraph.prototype.findByPath = function (path) {
         throw new Error('path parameter is not a string');
     }
 
-    var object = this.get(path);
+    var object = this.contains(path);
     if (object) { return object; }
 
     throw new Error('BEM object with path `' + path + '` not found');

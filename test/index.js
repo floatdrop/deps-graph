@@ -134,11 +134,11 @@ describe('Graph', function () {
 
         (function() {
             graph.deps('/expectingBlock');
-        }).should.throw();
+        }).should.throw('Not found `nonExistingBlock` in any levels.');
 
         (function() {
             graph.deps('/requiringBlock');
-        }).should.throw();
+        }).should.throw('Not found `nonExistingBlock` in any levels.');
     });
 
 });

@@ -18,14 +18,14 @@ DepsGraph.prototype.deps = function (bem) {
     var parentBems = this.find(bem, parentLevels);
 
     var require = [
-        parentBems.map(pluck('required')).map(this.deps, this),
+        flatit(parentBems.map(pluck('required'))).map(this.deps, this),
         bem.required.map(this.deps, this)
     ];
 
     var self = [parentBems, bem];
 
     var expect = [
-        parentBems.map(pluck('expected')).map(this.deps, this),
+        flatit(parentBems.map(pluck('expected'))).map(this.deps, this),
         bem.expected.map(this.deps, this)
     ];
 

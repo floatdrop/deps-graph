@@ -1,5 +1,4 @@
 /* global describe, it, beforeEach */
-
 var Graph = require('../index.js');
 var bemObject = require('bem-object');
 require('should');

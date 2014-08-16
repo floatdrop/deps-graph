@@ -40,11 +40,8 @@ DepsGraph.prototype.findByPath = function (path) {
     var bem = bemObject.fromPath(path);
 
     var g = this.graphs[bem.level];
-    if (g) {
-        var object = g[bem.id];
-        if (object) {
-            return object;
-        }
+    if (g && g[bem.id]) {
+        return g[bem.id];
     }
 
     throw new Error('BEM object with path `' + path + '` not found');

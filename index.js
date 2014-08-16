@@ -22,7 +22,8 @@ DepsGraph.prototype.deps = function (bem) {
         bem.required.map(this.deps, this)
     ];
 
-    var self = [parentBems, bem];
+    var self = [parentBems];
+    if (this.get(bem)) { self.push(bem); }
 
     var expect = [
         flatit(parentBems.map(pluck('expected'))).map(this.deps, this),
@@ -32,17 +33,26 @@ DepsGraph.prototype.deps = function (bem) {
     return flatit([require, self, expect]);
 };
 
+DepsGraph.prototype.get = function (path) {
+    if (typeof path === 'string') {
+        path = bemObject.fromPath(path);
+    }
+
+    var g = this.getLevel(path.level);
+    if (g && g[path.id]) {
+        return g[path.id];
+    }
+
+    return undefined;
+};
+
 DepsGraph.prototype.findByPath = function (path) {
     if (typeof path !== 'string') {
         throw new Error('path parameter is not a string');
     }
 
-    var bem = bemObject.fromPath(path);
-
-    var g = this.getLevel(bem.level);
-    if (g && g[bem.id]) {
-        return g[bem.id];
-    }
+    var object = this.get(path);
+    if (object) { return object; }
 
     throw new Error('BEM object with path `' + path + '` not found');
 };

@@ -63,8 +63,9 @@ DepsGraph.prototype.createLevel = function (level) {
 };
 
 DepsGraph.prototype.parentLevels = function (bem) {
-    var i = this.levels.indexOf(bem.level);
-    return i !== -1 ? sliced(this.levels, 0, i).map(this.getLevel, this) : [];
+    return contains(this.levels, bem.level)
+        ? sliced(this.levels, 0, i).map(this.getLevel, this)
+        : [];
 };
 
 DepsGraph.prototype.getLevel = function (level) { return this.graphs[level]; };

@@ -15,17 +15,17 @@ DepsGraph.prototype.deps = function (bem) {
     }
 
     var parentLevels = this.parentLevels(bem);
-    var parentBem = this.find(bem, parentLevels);
+    var parentBems = this.find(bem, parentLevels);
 
     var require = [
-        parentBem.map(pluck('required')).map(this.deps.bind(this)),
+        parentBems.map(pluck('required')).map(this.deps.bind(this)),
         bem.required.map(this.deps.bind(this))
     ];
 
-    var self = [parentBem, bem];
+    var self = [parentBems, bem];
 
     var expect = [
-        parentBem.map(pluck('expected')).map(this.deps.bind(this)),
+        parentBems.map(pluck('expected')).map(this.deps.bind(this)),
         bem.expected.map(this.deps.bind(this))
     ];
 

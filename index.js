@@ -71,8 +71,9 @@ DepsGraph.prototype.getLevel = function (level) { return this.graphs[level]; };
 
 DepsGraph.prototype.find = function (bem, levels) {
     return levels.reduce(function (previous, level) {
-        var bem = level[bem.id];
-        if (bem) { previous.push(bem); }
+        var object = level[bem.id];
+        if (object) { previous.push(object); }
+        return previous;
     }, []);
 };
 

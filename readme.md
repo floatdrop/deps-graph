@@ -1,4 +1,4 @@
-# deps-graph [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][depstat-image]][depstat-url]
+# deps-graph [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Dependency Status][depstat-image]][depstat-url]
 
 This module constructs dependency graph of blocks, constructed with [BEM objects](https://github.com/floatdrop/gulp-bem#bem-object).
 
@@ -32,3 +32,6 @@ MIT (c) 2014 Vsevolod Strukchinsky, Vladimir Starkov
 
 [depstat-url]: https://david-dm.org/floatdrop/deps-graph
 [depstat-image]: https://david-dm.org/floatdrop/deps-graph.png?theme=shields.io
+
+[coveralls-url]: https://coveralls.io/r/floatdrop/deps-graph
+[coveralls-image]: https://coveralls.io/repos/floatdrop/deps-graph/badge.png

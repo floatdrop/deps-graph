@@ -47,10 +47,6 @@ DepsGraph.prototype.contains = function (bem) {
 };
 
 DepsGraph.prototype.findByPath = function (path) {
-    if (typeof path !== 'string') {
-        throw new Error('path parameter is not a string');
-    }
-
     var object = this.contains(path);
     if (object) { return object; }
 

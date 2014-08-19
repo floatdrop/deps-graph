@@ -30,4 +30,14 @@ describe('levels', function () {
             graph.deps('/block');
         }).should.throw('Not found `upper` in any levels.');
     });
+
+    it('should not add empty theme modificator', function () {
+        var parent = bem('/blocks/block', { expect: {mods: {theme: 'base'}}});
+        var mods = bem('/blocks/block/_theme');
+        var block = bem('/index/block', { expect: {mods: {theme: 'summer'}}});
+
+        graph.add(parent, mods, block);
+
+        graph.deps('/index/block').should.eql([parent, block, mods]);
+    });
 });

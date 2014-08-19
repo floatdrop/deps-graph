@@ -1,4 +1,6 @@
-# deps-graph [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Dependency Status][depstat-image]][depstat-url]
+# deps-graph
+
+[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Dependency Status][depstat-image]][depstat-url]
 
 This module constructs dependency graph of blocks, constructed with [BEM objects](https://github.com/floatdrop/gulp-bem#bem-object).
 
@@ -25,13 +27,13 @@ It will throw `NotFound` exception, when `path` or any block in dependencies of 
 MIT (c) 2014 Vsevolod Strukchinsky, Vladimir Starkov
 
 [npm-url]: https://npmjs.org/package/deps-graph
-[npm-image]: https://badge.fury.io/js/deps-graph.png
+[npm-image]: http://img.shields.io/npm/v/deps-graph.svg?style=flat
 
 [travis-url]: http://travis-ci.org/floatdrop/deps-graph
-[travis-image]: https://travis-ci.org/floatdrop/deps-graph.png?branch=master
+[travis-image]: http://img.shields.io/travis/floatdrop/deps-graph.svg?branch=master&style=flat
 
-[depstat-url]: https://david-dm.org/floatdrop/deps-graph
-[depstat-image]: https://david-dm.org/floatdrop/deps-graph.png?theme=shields.io
+[depstat-url]: https://gemnasium.com/floatdrop/deps-graph
+[depstat-image]: http://img.shields.io/gemnasium/floatdrop/deps-graph.svg?style=flat
 
 [coveralls-url]: https://coveralls.io/r/floatdrop/deps-graph
-[coveralls-image]: https://coveralls.io/repos/floatdrop/deps-graph/badge.png
+[coveralls-image]: http://img.shields.io/coveralls/floatdrop/deps-graph.svg?style=flat

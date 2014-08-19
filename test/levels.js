@@ -31,13 +31,13 @@ describe('levels', function () {
         }).should.throw('Not found `upper` in any levels.');
     });
 
-    it('should not add empty theme modificator', function () {
+    it('should add modificator to current block dependencies from level expect', function () {
         var parent = bem('/blocks/block', { expect: {mods: {theme: 'base'}}});
-        var mods = bem('/blocks/block/_theme');
+        var mod = bem('/blocks/block/_theme');
         var block = bem('/index/block', { expect: {mods: {theme: 'summer'}}});
 
-        graph.add(parent, mods, block);
+        graph.add(parent, mod, block);
 
-        graph.deps('/index/block').should.eql([parent, block, mods]);
+        graph.deps('/index/block').should.eql([parent, block, mod]);
     });
 });

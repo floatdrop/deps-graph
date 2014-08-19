@@ -10,7 +10,7 @@ This module constructs dependency graph of blocks, constructed with [BEM objects
 
 Constructor. Can accept parent DepsGraph.
 
-### DepsGraph.add(BEMObject)
+### DepsGraph.add(BEMObject...)
 Returns: nothing  
 
 Stores [BEM object](https://github.com/floatdrop/gulp-bem#bem-object) in graph.

@@ -55,12 +55,15 @@ DepsGraph.prototype.findByPath = function (path) {
 
 function contains(array, object) { return array.indexOf(object) !== -1; }
 
-DepsGraph.prototype.add = function (bem) {
-    if (!contains(this.levels, bem.level)) {
-        this.createLevel(bem.level);
-    }
+DepsGraph.prototype.add = function () {
+    for (var i = 0; i < arguments.length; i++) {
+        var bem = arguments[i];
+        if (!contains(this.levels, bem.level)) {
+            this.createLevel(bem.level);
+        }
 
-    this.getLevel(bem.level)[bem.id] = bem;
+        this.getLevel(bem.level)[bem.id] = bem;
+    }
 };
 
 DepsGraph.prototype.createLevel = function (level) {

@@ -14,8 +14,7 @@ describe('levels', function () {
         var parent = bem('/level/block');
         var block = bem('/block');
 
-        graph.add(parent);
-        graph.add(block);
+        graph.add(parent, block);
 
         graph.deps('/block').should.eql([parent, block]);
         graph.deps('/level/block').should.eql([parent]);
@@ -25,8 +24,7 @@ describe('levels', function () {
         var bummer = bem('/level/bummer');
         var block = bem('/block', { require: 'upper' });
 
-        graph.add(bummer);
-        graph.add(block);
+        graph.add(bummer, block);
 
         (function() {
             graph.deps('/block');

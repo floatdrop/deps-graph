@@ -14,8 +14,7 @@ describe('require', function () {
         var required = bem('/required');
         var block = bem('/block', { require: 'required' });
 
-        graph.add(required);
-        graph.add(block);
+        graph.add(required, block);
 
         graph.deps('/block').should.eql([required, block]);
         graph.deps('/required').should.eql([required]);
@@ -26,9 +25,7 @@ describe('require', function () {
         var parent = bem('/level/block', { require: 'required' });
         var block = bem('/block');
 
-        graph.add(required);
-        graph.add(parent);
-        graph.add(block);
+        graph.add(required, parent, block);
 
         graph.deps('/block').should.eql([required, parent, block]);
         graph.deps('/level/block').should.eql([required, parent]);
@@ -38,8 +35,7 @@ describe('require', function () {
         var required = bem('/level/required');
         var block = bem('/block', { require: 'required' });
 
-        graph.add(required);
-        graph.add(block);
+        graph.add(required, block);
 
         graph.deps('/block').should.eql([required, block]);
     });

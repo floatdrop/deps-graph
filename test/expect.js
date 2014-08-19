@@ -14,8 +14,7 @@ describe('expect', function () {
         var expected = bem('/expected');
         var block = bem('/block', { expect: 'expected' });
 
-        graph.add(expected);
-        graph.add(block);
+        graph.add(expected, block);
 
         graph.deps('/block').should.eql([block, expected]);
         graph.deps('/expected').should.eql([expected]);
@@ -26,9 +25,7 @@ describe('expect', function () {
         var parent = bem('/level/block', { expect: 'expected' });
         var block = bem('/block');
 
-        graph.add(expected);
-        graph.add(parent);
-        graph.add(block);
+        graph.add(expected, parent, block);
 
         graph.deps('/block').should.eql([parent, block, expected]);
         graph.deps('/level/block').should.eql([parent, expected]);
@@ -38,8 +35,7 @@ describe('expect', function () {
         var expected = bem('/level/expected');
         var block = bem('/block', { expect: 'expected' });
 
-        graph.add(expected);
-        graph.add(block);
+        graph.add(expected, block);
 
         graph.deps('/block').should.eql([block, expected]);
     });

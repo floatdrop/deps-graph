@@ -33,11 +33,12 @@ describe('levels', function () {
 
     it('should add modificator to current block dependencies from level expect', function () {
         var parent = bem('/blocks/block', { expect: {mods: {theme: 'base'}}});
-        var mod = bem('/blocks/block/_theme');
+        var modBase = bem('/blocks/block/_theme', { value: 'base'});
+        var modSummer = bem('/blocks/block/_theme', { value: 'summer'});
         var block = bem('/index/block', { expect: {mods: {theme: 'summer'}}});
 
-        graph.add(parent, mod, block);
+        graph.add(parent, modBase, modSummer, block);
 
-        graph.deps('/index/block').should.eql([parent, block, mod]);
+        graph.deps('/index/block').should.eql([parent, block, modBase, modSummer]);
     });
 });

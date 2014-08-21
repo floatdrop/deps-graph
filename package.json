@@ -4,7 +4,7 @@
   "description": "Builds graph by BEM deps",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -R spec",
+    "test": "mocha -R spec test",
     "coveralls": "istanbul cover _mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage"
   },
   "repository": {

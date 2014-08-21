@@ -3,7 +3,7 @@ var Graph = require('../index.js');
 var bem = require('bem-object').fromPath;
 require('should');
 
-describe('require', function () {
+describe('graph.require', function () {
     var graph;
 
     beforeEach(function() {

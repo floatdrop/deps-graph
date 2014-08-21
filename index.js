@@ -1,88 +1,70 @@
 var flatit = require('flatit');
-var sliced = require('sliced');
 var bemObject = require('bem-object');
+var Levels = require('./levels.js').Levels;
 
 function DepsGraph(parent) {
-    this.parent = parent;
-    this.graphs = {};
-    this.levels = [];
+    parent = parent || {};
+    this.levels = new Levels(parent.levels);
 }
 
 function pluck(prop) { return function (o) { return o[prop]; }; }
 
-DepsGraph.prototype.deps = function (bem) {
-    if (typeof bem === 'string') {
-        bem = this.findByPath(bem);
+DepsGraph.prototype.deps = function (path) {
+    if (typeof path !== 'string') {
+        throw new Error('Path argument should be a String, not an ' + typeof path);
     }
 
-    var parentBems = this.find(bem);
+    var bem = bemObject.fromPath(path);
+    var level = this.levels.get(bem.level);
 
-    var require = [
-        flatit(parentBems.map(pluck('required'))).map(this.deps, this),
-        bem.required.map(this.deps, this)
-    ];
+    bem = level && level.get(bem);
+
+    if (!bem) {
+        throw new Error('Not found `' + path + '` in any levels.');
+    }
+
+    return this._deps(bem);
+};
+
+DepsGraph.prototype._deps = function (bem) {
+    var parentBems = this.getParentBems(bem);
+
+    var path = bem.path;
+    bem = this.levels.get(bem.level).get(bem);
+
+    if (!bem && parentBems.length === 0) {
+        throw new Error('Not found `' + path + '` in any levels.');
+    }
+
+    var require = flatit(parentBems.map(pluck('required')))
+            .map(this._deps, this);
+    if (bem) { require = require.concat(bem.required.map(this._deps, this)); }
 
     var self = [parentBems];
+    if (bem) { self.push(bem); }
 
-    if (this.contains(bem)) {
-        self.push(bem);
-    } else if (parentBems.length === 0) {
-        throw new Error('Not found `' + bem.path + '` in any levels.');
-    }
+    var expect = flatit(parentBems.map(pluck('expected')))
+        .map(this._deps, this);
 
-    var expect = [
-        flatit(parentBems.map(pluck('expected'))).map(this.deps, this),
-        bem.expected.map(this.deps, this)
-    ];
+    if (bem) { expect = expect.concat(bem.expected.map(this._deps, this)); }
 
     return flatit([require, self, expect]);
 };
 
-DepsGraph.prototype.contains = function (bem) {
-    if (typeof bem === 'string') {
-        bem = bemObject.fromPath(bem);
-    }
-
-    return this.getLevel(bem.level) && this.getLevel(bem.level)[bem.id];
-};
-
-DepsGraph.prototype.findByPath = function (path) {
-    var object = this.contains(path);
-    if (object) { return object; }
-
-    throw new Error('BEM object with path `' + path + '` not found');
-};
-
-function contains(array, object) { return array.indexOf(object) !== -1; }
-
 DepsGraph.prototype.add = function () {
     for (var i = 0; i < arguments.length; i++) {
         var bem = arguments[i];
-        if (!contains(this.levels, bem.level)) {
-            this.createLevel(bem.level);
-        }
-
-        this.getLevel(bem.level)[bem.id] = bem;
+        var level = this.levels.create(bem.level);
+        level.add(bem);
     }
 };
 
-DepsGraph.prototype.createLevel = function (level) {
-    this.levels.push(level);
-    this.graphs[level] = {};
-};
-
-DepsGraph.prototype.parentLevels = function (bem) {
-    var i = this.levels.indexOf(bem.level);
-    return i === -1 ? [] : sliced(this.levels, 0, i).map(this.getLevel, this);
-};
-
-DepsGraph.prototype.getLevel = function (level) { return this.graphs[level]; };
-
-DepsGraph.prototype.find = function (bem) {
-    var levels = this.parentLevels(bem);
+DepsGraph.prototype.getParentBems = function (bem) {
+    if (!bem) { return []; }
+    var levels = this.levels.parents(bem);
     return levels.reduce(function (previous, level) {
-        var object = level[bem.id];
-        if (object) { previous.push(object); }
+        var found = level.get(bem);
+        if (found) { previous.push(found); }
         return previous;
     }, []);
 };

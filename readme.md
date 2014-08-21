@@ -16,6 +16,7 @@ Returns: nothing
 Stores [BEM object](https://github.com/floatdrop/gulp-bem#bem-object) in graph.
 
 ### DepsGraph.deps(path)
+Type: `String`  
 Returns: `Array` of [BEM objects](https://github.com/floatdrop/gulp-bem#bem-object).
 
 Gets all dependencies for block at path. Path is equivalent of `level/block/__elem/_mod`. Returns dependencies in order, that defined by `require` and `expect` of corresponding BEM objects and levels of declaration.

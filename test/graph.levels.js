@@ -3,7 +3,7 @@ var Graph = require('../index.js');
 var bem = require('bem-object').fromPath;
 require('should');
 
-describe('levels', function () {
+describe('graph.levels', function () {
     var graph;
 
     beforeEach(function() {
@@ -15,7 +15,7 @@ describe('levels', function () {
 
         var parent = bem('/level/block');
         graph.add(parent);
-        
+
         var block = bem('/block');
         childGraph.add(block);
 

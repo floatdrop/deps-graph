@@ -2,7 +2,8 @@ var flatit = require('flatit');
 var sliced = require('sliced');
 var bemObject = require('bem-object');
 
-function DepsGraph() {
+function DepsGraph(parent) {
+    this.parent = parent;
     this.graphs = {};
     this.levels = [];
 }
@@ -14,8 +15,7 @@ DepsGraph.prototype.deps = function (bem) {
         bem = this.findByPath(bem);
     }
 
-    var parentLevels = this.parentLevels(bem);
-    var parentBems = this.find(bem, parentLevels);
+    var parentBems = this.find(bem);
 
     var require = [
         flatit(parentBems.map(pluck('required'))).map(this.deps, this),
@@ -78,7 +78,8 @@ DepsGraph.prototype.parentLevels = function (bem) {
 
 DepsGraph.prototype.getLevel = function (level) { return this.graphs[level]; };
 
-DepsGraph.prototype.find = function (bem, levels) {
+DepsGraph.prototype.find = function (bem) {
+    var levels = this.parentLevels(bem);
     return levels.reduce(function (previous, level) {
         var object = level[bem.id];
         if (object) { previous.push(object); }

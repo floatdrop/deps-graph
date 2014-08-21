@@ -10,6 +10,23 @@ describe('levels', function () {
         graph = new Graph();
     });
 
+    it('should search block in levels, that in parent graph', function () {
+        var childGraph = new Graph(graph);
+
+        var parent = bem('/level/block');
+        graph.add(parent);
+        
+        var block = bem('/block');
+        childGraph.add(block);
+
+        childGraph.deps('/block').should.eql([parent, block]);
+        childGraph.deps('/level/block').should.eql([parent]);
+        graph.deps('/level/block').should.eql([parent]);
+        (function () {
+            graph.deps('/block');
+        }).should.throw();
+    });
+
     it('should add blocks from parent levels', function () {
         var parent = bem('/level/block');
         var block = bem('/block');

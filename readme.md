@@ -32,8 +32,8 @@ MIT (c) 2014 Vsevolod Strukchinsky, Vladimir Starkov
 [travis-url]: http://travis-ci.org/floatdrop/deps-graph
 [travis-image]: http://img.shields.io/travis/floatdrop/deps-graph.svg?branch=master&style=flat
 
-[depstat-url]: https://gemnasium.com/floatdrop/deps-graph
-[depstat-image]: http://img.shields.io/gemnasium/floatdrop/deps-graph.svg?style=flat
+[depstat-url]: https://david-dm.org/floatdrop/deps-graph
+[depstat-image]: http://img.shields.io/david/floatdrop/deps-graph.svg?style=flat
 
 [coveralls-url]: https://coveralls.io/r/floatdrop/deps-graph
 [coveralls-image]: http://img.shields.io/coveralls/floatdrop/deps-graph.svg?style=flat

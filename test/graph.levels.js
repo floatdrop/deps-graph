@@ -45,7 +45,7 @@ describe('graph.levels', function () {
 
         (function() {
             graph.deps('/block');
-        }).should.throw(new Error('Not found `/upper`:\n\tfrom /block'));
+        }).should.throw(new Error('Not found `/upper`\n\tfrom /block'));
     });
 
     it('should add modificator to current block dependencies from level expect', function () {

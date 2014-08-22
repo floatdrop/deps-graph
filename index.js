@@ -13,11 +13,11 @@ function pluck(prop) { return function (o) { return o[prop]; }; }
 DepsGraph.prototype.formatError = function (bem) {
     var message = 'Not found `' + bem.level + '/' + bem.id + '`';
 
-    if (this._stack.length > 1) { message += ':\n'; }
+    if (this._stack.length > 1) { message += '\n'; }
 
     for (var i = this._stack.length - 2; i >= 0; i--) {
         var obj = this._stack[i];
-        message += '\tfrom ' + obj.level + '/' + obj.path + '\n';
+        message += '\tfrom ' + obj.level + '/' + obj.id + '\n';
     }
     return new Error(message);
 };

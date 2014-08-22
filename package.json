@@ -30,7 +30,7 @@
     "mocha-lcov-reporter": "^0.0.1"
   },
   "dependencies": {
-    "bem-object": "^0.11.0",
+    "bem-object": "^0.11.1",
     "flatit": "^1.1.0",
     "sliced": "^0.0.5"
   }

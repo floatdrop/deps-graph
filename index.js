@@ -51,16 +51,18 @@ DepsGraph.prototype._deps = function (bem) {
     }
 
     var require = flatit(parentBems.map(pluck('required')))
-            .map(this._deps, this);
-    if (bem) { require = require.concat(bem.required.map(this._deps, this)); }
+        .map(this._deps, this);
 
     var self = [parentBems];
-    if (bem) { self.push(bem); }
 
     var expect = flatit(parentBems.map(pluck('expected')))
         .map(this._deps, this);
 
-    if (bem) { expect = expect.concat(bem.expected.map(this._deps, this)); }
+    if (bem) {
+        require = require.concat(bem.required.map(this._deps, this));
+        self.push(bem);
+        expect = expect.concat(bem.expected.map(this._deps, this));
+    }
 
     this._stack.pop();
     return flatit([require, self, expect]);

@@ -5,9 +5,22 @@ var Levels = require('./levels.js').Levels;
 function DepsGraph(parent) {
     parent = parent || {};
     this.levels = new Levels(parent.levels);
+    this._stack = [];
 }
 
 function pluck(prop) { return function (o) { return o[prop]; }; }
+
+DepsGraph.prototype.formatError = function (bem) {
+    var message = 'Not found `' + bem.level + '/' + bem.id + '`';
+
+    if (this._stack.length > 1) { message += ':\n'; }
+
+    for (var i = this._stack.length - 2; i >= 0; i--) {
+        var obj = this._stack[i];
+        message += '\tfrom ' + obj.level + '/' + obj.path + '\n';
+    }
+    return new Error(message);
+};
 
 DepsGraph.prototype.deps = function (path) {
     if (typeof path !== 'string') {
@@ -20,20 +33,21 @@ DepsGraph.prototype.deps = function (path) {
     bem = level && level.get(bem);
 
     if (!bem) {
-        throw new Error('Not found `' + path + '` in any levels.');
+        throw new Error('Not found `' + path + '`');
     }
 
     return this._deps(bem);
 };
 
 DepsGraph.prototype._deps = function (bem) {
+    this._stack.push(bem);
     var parentBems = this.getParentBems(bem);
 
-    var path = bem.path;
+    var _bem = bem;
     bem = this.levels.get(bem.level).get(bem);
 
     if (!bem && parentBems.length === 0) {
-        throw new Error('Not found `' + path + '` in any levels.');
+        throw this.formatError(_bem);
     }
 
     var require = flatit(parentBems.map(pluck('required')))
@@ -48,6 +62,7 @@ DepsGraph.prototype._deps = function (bem) {
 
     if (bem) { expect = expect.concat(bem.expected.map(this._deps, this)); }
 
+    this._stack.pop();
     return flatit([require, self, expect]);
 };
 

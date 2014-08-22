@@ -13,7 +13,7 @@ describe('graph', function () {
     it('should throw exception for not existing path', function () {
         (function() {
             graph.deps('undefined');
-        }).should.throw('Not found `undefined` in any levels.');
+        }).should.throw('Not found `undefined`');
     });
 
     it('should return simple block', function () {

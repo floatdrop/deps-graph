@@ -7,8 +7,6 @@ function DepsGraph(parent) {
     this._stack = [];
 }
 
-function pluck(prop) { return function (o) { return o[prop]; }; }
-
 function toArray(obj) {
     if (!obj) { return []; }
     if (!Array.isArray(obj)) { return [obj]; }
@@ -25,6 +23,9 @@ DepsGraph.prototype.deps = function (bem) {
     return this._deps('', bem);
 };
 
+function required (prev, curr) { return prev.concat(curr.require || []); }
+function expected (prev, curr) { return prev.concat(curr.expect || []); }
+
 DepsGraph.prototype._deps = function (type, bem) {
     this._stack.push(arguments);
     var parentBems = this.getParentBems(bem);
@@ -37,12 +38,13 @@ DepsGraph.prototype._deps = function (type, bem) {
     if (!bem && parentBems.length === 0) {
         throw this.formatError(_bem);
     }
-    var require = flatit(parentBems.map(pluck('require')).map(toArray))
+
+    var require = parentBems.reduce(required, [])
         .map(this._deps.bind(this, 'required'));
 
     var self = [parentBems];
 
-    var expect = flatit(parentBems.map(pluck('expect')).map(toArray))
+    var expect = parentBems.reduce(expected, [])
         .map(this._deps.bind(this, 'expected'));
 
     if (bem) {

@@ -20,6 +20,6 @@ describe('graph', function () {
         var block = bem('/block');
         graph.add(block);
 
-        graph.deps('/block').should.eql([block]);
+        graph.deps(block).should.eql([block]);
     });
 });

@@ -11,11 +11,11 @@ describe('graph.errors', function () {
     });
 
     it('should format errors', function () {
-        var block = bem('/level/block', { require: 'block__elem'});
+        var block = bem('/level/block', { require: [bem('/level/block__elem')]});
         graph.add(block);
 
         (function () {
-            graph.deps('/level/block');
+            graph.deps(bem('/level/block'));
         }).should.throw(new Error('Not found `/level/block__elem`\n\tfrom /level/block'));
     });
 });

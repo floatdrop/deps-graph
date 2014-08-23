@@ -9,62 +9,52 @@ function DepsGraph(parent) {
 
 function pluck(prop) { return function (o) { return o[prop]; }; }
 
-DepsGraph.prototype.formatError = function (bem) {
-    var message = 'Not found `' + bem.level + '/' + bem.id + '`';
+function toArray(obj) {
+    if (!obj) { return []; }
+    if (!Array.isArray(obj)) { return [obj]; }
+    return obj;
+}
 
-    if (this._stack.length > 1) { message += '\n'; }
-
-    for (var i = this._stack.length - 2; i >= 0; i--) {
-        var obj = this._stack[i];
-        message += '\tfrom ' + obj.level + '/' + obj.id + '\n';
-    }
-    return new Error(message);
-};
-
-DepsGraph.prototype.deps = function (path) {
-    if (typeof path !== 'string') {
-        throw new Error('Path argument should be a String, not an ' + typeof path);
-    }
-
-    var parts = path.split('/');
-    var bem = {};
-    bem.block = parts.pop();
-    bem.level = parts.join('/');
-
+DepsGraph.prototype.deps = function (bem) {
     var level = this.levels.get(bem.level);
 
-    bem = level && level.get(bem);
-
-    if (!bem) {
-        throw new Error('Not found `' + path + '`');
+    if (!level || !level.get(bem)) {
+        throw new Error('Not found `' + bem.path + '`');
     }
 
-    return this._deps(bem);
+    return this._deps('', bem);
 };
 
-DepsGraph.prototype._deps = function (bem) {
-    this._stack.push(bem);
+DepsGraph.prototype._deps = function (type, bem) {
+    this._stack.push(arguments);
     var parentBems = this.getParentBems(bem);
 
     var _bem = bem;
-    bem = this.levels.get(bem.level).get(bem);
+
+    var level = this.levels.get(bem.level);
+    bem = level && level.get(bem);
 
     if (!bem && parentBems.length === 0) {
         throw this.formatError(_bem);
     }
-
-    var require = flatit(parentBems.map(pluck('required')))
-        .map(this._deps, this);
+    var require = flatit(parentBems.map(pluck('require')).map(toArray))
+        .map(this._deps.bind(this, 'required'));
 
     var self = [parentBems];
 
-    var expect = flatit(parentBems.map(pluck('expected')))
-        .map(this._deps, this);
+    var expect = flatit(parentBems.map(pluck('expect')).map(toArray))
+        .map(this._deps.bind(this, 'expected'));
 
     if (bem) {
-        require = require.concat(bem.required.map(this._deps, this));
+        require = require.concat(
+            toArray(bem.require).map(this._deps.bind(this, 'required'))
+        );
+
         self.push(bem);
-        expect = expect.concat(bem.expected.map(this._deps, this));
+
+        expect = expect.concat(
+            toArray(bem.expect).map(this._deps.bind(this, 'expected'))
+        );
     }
 
     this._stack.pop();
@@ -87,6 +77,20 @@ DepsGraph.prototype.getParentBems = function (bem) {
         if (found) { previous.push(found); }
         return previous;
     }, []);
+};
+
+DepsGraph.prototype.formatError = function (bem) {
+    var message = 'Not found `' + bem.level + '/' + bem.id + '`';
+
+    if (this._stack.length > 1) { message += '\n'; }
+
+    for (var i = this._stack.length - 2; i >= 0; i--) {
+        var frame = this._stack[i];
+        var type = frame[0];
+        var obj = frame[1];
+        message += '\t' + type + 'from ' + obj.level + '/' + obj.id + '\n';
+    }
+    return new Error(message);
 };
 
 module.exports = DepsGraph;

@@ -19,11 +19,11 @@ describe('graph.levels', function () {
         var block = bem('/block');
         childGraph.add(block);
 
-        childGraph.deps('/block').should.eql([parent, block]);
-        childGraph.deps('/level/block').should.eql([parent]);
-        graph.deps('/level/block').should.eql([parent]);
+        childGraph.deps(block).should.eql([parent, block]);
+        childGraph.deps(parent).should.eql([parent]);
+        graph.deps(parent).should.eql([parent]);
         (function () {
-            graph.deps('/block');
+            graph.deps(block);
         }).should.throw();
     });
 
@@ -33,29 +33,35 @@ describe('graph.levels', function () {
 
         graph.add(parent, block);
 
-        graph.deps('/block').should.eql([parent, block]);
-        graph.deps('/level/block').should.eql([parent]);
+        graph.deps(block).should.eql([parent, block]);
+        graph.deps(parent).should.eql([parent]);
     });
 
     it('should throw exception only when searched in all levels', function () {
         var bummer = bem('/level/bummer');
-        var block = bem('/block', { require: 'upper' });
+        var block = bem('/block', { require: bem('/upper') });
 
         graph.add(bummer, block);
 
         (function() {
-            graph.deps('/block');
+            graph.deps(block);
         }).should.throw(new Error('Not found `/upper`\n\tfrom /block'));
     });
 
     it('should add modificator to current block dependencies from level expect', function () {
-        var parent = bem('/blocks/block', { expect: {mods: {theme: 'base'}}});
-        var modBase = bem('/blocks/block/_theme', { value: 'base'});
-        var modSummer = bem('/blocks/block/_theme', { value: 'summer'});
-        var block = bem('/index/block', { expect: {mods: {theme: 'summer'}}});
+        var parent = bem('/blocks/block', {
+            expect: bem('/blocks/block/_theme',{ val: 'base'})
+        });
+
+        var modBase = bem('/blocks/block/_theme', { val: 'base'});
+        var modSummer = bem('/blocks/block/_theme', { val: 'summer'});
+
+        var block = bem('/index/block', {
+            expect: bem('/index/block/_theme',{val: 'summer'})
+        });
 
         graph.add(parent, modBase, modSummer, block);
 
-        graph.deps('/index/block').should.eql([parent, block, modBase, modSummer]);
+        graph.deps(block).should.eql([parent, block, modBase, modSummer]);
     });
 });

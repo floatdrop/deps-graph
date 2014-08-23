@@ -1,5 +1,4 @@
 var flatit = require('flatit');
-var bemObject = require('bem-object');
 var Levels = require('./levels.js').Levels;
 
 function DepsGraph(parent) {
@@ -27,7 +26,11 @@ DepsGraph.prototype.deps = function (path) {
         throw new Error('Path argument should be a String, not an ' + typeof path);
     }
 
-    var bem = bemObject.fromPath(path);
+    var parts = path.split('/');
+    var bem = {};
+    bem.block = parts.pop();
+    bem.level = parts.join('/');
+
     var level = this.levels.get(bem.level);
 
     bem = level && level.get(bem);

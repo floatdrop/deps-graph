@@ -4,7 +4,7 @@
 
 This module constructs dependency graph of blocks, constructed with [BEM objects](https://github.com/floatdrop/gulp-bem#bem-object). It relies on `require` and `expect` properties in BEM objects to build connections between blocks.
 
-`require` and `expect` can be `BEMObject` or `Array` of BEMObjects.
+`require` and `expect` should be `Array` of BEMObjects.
 
 ## API
 

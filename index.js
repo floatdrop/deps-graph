@@ -42,13 +42,13 @@ DepsGraph.prototype._deps = function (type, bem) {
         .map(this._deps.bind(this, 'expected'));
 
     if (bem) {
-        if (bem.require) {
+        if (bem.require && bem.require.length) {
             require = require.concat(bem.require.map(this._deps.bind(this, 'required')));
         }
 
         self.push(bem);
 
-        if (bem.expect) {
+        if (bem.expect && bem.expect.length) {
             expect = expect.concat(bem.expect.map(this._deps.bind(this, 'expected')));
         }
     }

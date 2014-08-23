@@ -7,12 +7,6 @@ function DepsGraph(parent) {
     this._stack = [];
 }
 
-function toArray(obj) {
-    if (!obj) { return []; }
-    if (!Array.isArray(obj)) { return [obj]; }
-    return obj;
-}
-
 DepsGraph.prototype.deps = function (bem) {
     var level = this.levels.get(bem.level);
 
@@ -48,15 +42,15 @@ DepsGraph.prototype._deps = function (type, bem) {
         .map(this._deps.bind(this, 'expected'));
 
     if (bem) {
-        require = require.concat(
-            toArray(bem.require).map(this._deps.bind(this, 'required'))
-        );
+        if (bem.require) {
+            require = require.concat(bem.require.map(this._deps.bind(this, 'required')));
+        }
 
         self.push(bem);
 
-        expect = expect.concat(
-            toArray(bem.expect).map(this._deps.bind(this, 'expected'))
-        );
+        if (bem.expect) {
+            expect = expect.concat(bem.expect.map(this._deps.bind(this, 'expected')));
+        }
     }
 
     this._stack.pop();

@@ -11,7 +11,7 @@ describe('graph.errors', function () {
     });
 
     it('should format errors', function () {
-        var block = bem('/level/block', { require: [bem('/level/block__elem')]});
+        var block = bem('/level/block', {}, { require: [bem('/level/block__elem')]});
         graph.add(block);
 
         (function () {

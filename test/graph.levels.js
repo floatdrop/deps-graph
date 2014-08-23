@@ -39,7 +39,7 @@ describe('graph.levels', function () {
 
     it('should throw exception only when searched in all levels', function () {
         var bummer = bem('/level/bummer');
-        var block = bem('/block', { require: bem('/upper') });
+        var block = bem('/block', {}, { require: bem('/upper') });
 
         graph.add(bummer, block);
 
@@ -49,15 +49,15 @@ describe('graph.levels', function () {
     });
 
     it('should add modificator to current block dependencies from level expect', function () {
-        var parent = bem('/blocks/block', {
-            expect: bem('/blocks/block/_theme',{ val: 'base'})
+        var parent = bem('/blocks/block', {}, {
+            expect: bem('/blocks/block/_theme', {}, { val: 'base'})
         });
 
-        var modBase = bem('/blocks/block/_theme', { val: 'base'});
-        var modSummer = bem('/blocks/block/_theme', { val: 'summer'});
+        var modBase = bem('/blocks/block/_theme', {}, { val: 'base'});
+        var modSummer = bem('/blocks/block/_theme', {}, { val: 'summer'});
 
-        var block = bem('/index/block', {
-            expect: bem('/index/block/_theme',{val: 'summer'})
+        var block = bem('/index/block', {}, {
+            expect: bem('/index/block/_theme', {}, {val: 'summer'})
         });
 
         graph.add(parent, modBase, modSummer, block);

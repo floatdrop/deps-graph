@@ -24,7 +24,7 @@
   "homepage": "https://github.com/floatdrop/deps-graph",
   "devDependencies": {
     "mocha": "^1.21.4",
-    "bem-object": "^1.0.1",
+    "bem-object": "^1.1.0",
     "should": "^4.0.4",
     "coveralls": "^2.7.0",
     "istanbul": "^0.3.0",

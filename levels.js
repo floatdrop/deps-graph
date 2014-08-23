@@ -17,10 +17,6 @@ Level.prototype.list = function () {
     return Object.keys(this._objects);
 };
 
-Level.prototype.objects = function () {
-    return this._objects;
-};
-
 function Levels(parent) {
     this._parent = parent;
     this._levels = {};
@@ -28,10 +24,6 @@ function Levels(parent) {
 
 Levels.prototype.list = function () {
     return Object.keys(this._levels);
-};
-
-Levels.prototype.levels = function () {
-    return Object.keys(this._levels).map(this.get, this);
 };
 
 Levels.prototype.parents = function (bem) {

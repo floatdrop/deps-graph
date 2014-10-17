@@ -10,12 +10,13 @@ describe('graph.errors', function () {
         graph = new Graph();
     });
 
-    it('should format errors', function () {
+
+    it('should format errors in require', function () {
         var block = bem('/level/block', {}, { require: [bem('/level/block__elem')]});
         graph.add(block);
 
         (function () {
             graph.deps(bem('/level/block'));
-        }).should.throw(new Error('Not found `/level/block__elem`\n\tfrom /level/block'));
+        }).should.throw(/Not found `\/level\/block__elem`/);
     });
 });

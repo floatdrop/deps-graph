@@ -4,7 +4,6 @@ var Levels = require('./levels.js').Levels;
 function DepsGraph(parent) {
     parent = parent || {};
     this.levels = new Levels(parent.levels);
-    this._stack = [];
 }
 
 DepsGraph.prototype.deps = function (bem) {
@@ -21,7 +20,6 @@ function required (prev, curr) { return prev.concat(curr.require || []); }
 function expected (prev, curr) { return prev.concat(curr.expect || []); }
 
 DepsGraph.prototype._deps = function (type, bem) {
-    this._stack.push(arguments);
     var parentBems = this.getParentBems(bem);
 
     var _bem = bem;
@@ -53,7 +51,6 @@ DepsGraph.prototype._deps = function (type, bem) {
         }
     }
 
-    this._stack.pop();
     return flatit([require, self, expect]);
 };
 
@@ -76,17 +73,7 @@ DepsGraph.prototype.getParentBems = function (bem) {
 };
 
 DepsGraph.prototype.formatError = function (bem) {
-    var message = 'Not found `' + bem.level + '/' + bem.id + '`';
-
-    if (this._stack.length > 1) { message += '\n'; }
-
-    for (var i = this._stack.length - 2; i >= 0; i--) {
-        var frame = this._stack[i];
-        var type = frame[0];
-        var obj = frame[1];
-        message += '\t' + type + 'from ' + obj.level + '/' + obj.id + '\n';
-    }
-    return new Error(message);
+    return new Error('Not found `' + bem.level + '/' + bem.id + '`');
 };
 
 module.exports = DepsGraph;
